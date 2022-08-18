@@ -61,14 +61,17 @@ public class UserDAO implements CrudDAO<User> {
 
     public String getUsername(String username) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT (username) FROM users WHERE username = ?");
+            //Gets here
+            PreparedStatement ps = con.prepareStatement("SELECT Username FROM person WHERE Username = ?");
+            System.out.println("wack");
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) return rs.getString("username");
+            if (rs.next()) return rs.getString("Username");
 
         } catch (SQLException e) {
-            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when trying to save to the database.");
         }
 
         return null;

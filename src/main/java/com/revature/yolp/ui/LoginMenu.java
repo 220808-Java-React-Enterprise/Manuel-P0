@@ -42,6 +42,7 @@ public class LoginMenu implements IMenu {
                         break;
                     case "2":
                         User user = signup();
+                        System.out.println("checkpoint");
                         userService.register(user);
                         new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO())).start();
                         break;
@@ -87,6 +88,12 @@ public class LoginMenu implements IMenu {
         String username = "";
         String password = "";
         String password2 = "";
+        String firstName = "";
+        String lastName = "";
+        String fullName = "";
+        String email = "";
+
+
         User user;
         Scanner scan = new Scanner(System.in);
 
@@ -131,15 +138,54 @@ public class LoginMenu implements IMenu {
                     }
                 }
 
+                NameExit:
+                {
+                    while (true) {
+                        try {
+                            System.out.print("\nEnter first name: ");
+                            firstName = scan.nextLine();
+
+
+                            System.out.print("\nEnter last name");
+                            lastName = scan.nextLine();
+
+                            break NameExit;
+                        } catch (InvalidUserException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+
+                EmailExit:
+                {
+                    while (true) {
+                        try {
+                            System.out.print("\nEnter a password: ");
+                            password = scan.nextLine();
+
+                            userService.isValidPassword(password);
+
+                            System.out.print("\nRe eneter password: ");
+                            password2 = scan.nextLine();
+
+                            userService.isSamePassword(password, password2);
+                            break EmailExit;
+                        } catch (InvalidUserException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+
+
                confirmExit: {
                    while (true) {
                        System.out.println("\nIs this correct (y/n):");
-                       System.out.println("Username: " + username + "\nPassword: " + password);
+                       System.out.println("Username: " + username + "\nPassword: " + password + "\nFull Name: " + fullName + "\nEmail: " + email);
                        System.out.print("\nEnter: ");
 
                        switch (scan.nextLine().toLowerCase()) {
                            case "y":
-                               user = new User(UUID.randomUUID().toString(), username, password);
+                               user = new User(UUID.randomUUID().toString(), username, password, fullName, email);
                                return user;
                            case "n":
                                System.out.println("\nRestarting...");
@@ -150,6 +196,7 @@ public class LoginMenu implements IMenu {
                        }
                    }
                }
+
             }
         }
     }
