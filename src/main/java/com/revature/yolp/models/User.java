@@ -8,25 +8,27 @@ public class User {
     private String fullName;
 
     private String email;
-    private String role = "DEFAULT";
+    private boolean isAdmin = false;
+
 
     public User() {
 
     }
 
-    public User(String id, String username, String password, String fullName, String email) {
+    public User(String id, String username, String password, String fullName, String email, boolean isAdmin) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.email = email;
+        this.isAdmin = isAdmin;
     }
 
-    public User(String id, String username, String password, String role) {
+    public User(String id, String username, String password, boolean isAdmin) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.isAdmin = isAdmin;
     }
 
     public String getId() {
@@ -49,20 +51,26 @@ public class User {
         return password;
     }
 
+    public String getName() {
+        return fullName;
+    }
+    public String getEmail() {
+        return email;
+    }
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Boolean getAdmin() {
+        return isAdmin;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setAdmin(String role) {
+        this.isAdmin = isAdmin;
     }
 
     public String toFileString() {
-        return id + ":" + username + ":" + password + ":" + role + "\n";
+        return id + ":" + username + ":" + password + ":" + isAdmin + "\n";
     }
 
     @Override
@@ -71,7 +79,7 @@ public class User {
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
+                ", isAdmin='" + isAdmin + '\'' +
                 '}';
     }
 }

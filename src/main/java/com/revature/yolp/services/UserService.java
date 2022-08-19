@@ -34,9 +34,20 @@ public class UserService {
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) throw new InvalidUserException("\nInvalid password! Minimum eight characters, at least one letter and one number");
         return true;
     }
+    public boolean isValidEmail(String email){
+        if(email.contains("@") == false){
+            throw new InvalidUserException("\nInvalid password! Minimum eight characters, at least one letter and one number");
+        }
+        return true;
+    }
 
     public boolean isDuplicateUsername(String username) {
         if (userDAO.getUsername(username) != null) throw new InvalidUserException("\nSorry, " + username + " already been taken :(");
+        return false;
+    }
+
+    public boolean isDuplicateEmail(String email) {
+        if (userDAO.getEmail(email) != null) throw new InvalidUserException("\nSorry, " + email + " is already in use!");
         return false;
     }
 
