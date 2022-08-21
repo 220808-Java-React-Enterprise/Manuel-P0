@@ -3,10 +3,17 @@ package com.revature.yolp.ui;
 import com.revature.yolp.daos.RestaurantDAO;
 import com.revature.yolp.daos.ReviewDAO;
 import com.revature.yolp.daos.UserDAO;
+import com.revature.yolp.daos.PaintingDAO;
+import com.revature.yolp.daos.CartDAO;
+import com.revature.yolp.daos.OrderDAO;
+
 import com.revature.yolp.models.User;
 import com.revature.yolp.services.RestaurantService;
 import com.revature.yolp.services.ReviewService;
 import com.revature.yolp.services.UserService;
+import com.revature.yolp.services.PaintingService;
+import com.revature.yolp.services.CartService;
+import com.revature.yolp.services.OrderService;
 import com.revature.yolp.utils.custom_exceptions.InvalidUserException;
 
 import java.util.List;
@@ -44,7 +51,8 @@ public class LoginMenu implements IMenu {
                         User user = signup();
                         System.out.println("checkpoint");
                         userService.register(user);
-                        new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO())).start();
+                        //new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO())).start();
+                        new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO())).start();
                         break;
                     case "x":
                         System.out.println("\nGoodbye!");
@@ -75,7 +83,7 @@ public class LoginMenu implements IMenu {
                 try {
                     User user = userService.login(username, password);
                     if (user.getAdmin().equals(true)) new AdminMenu(user, new UserService(new UserDAO())).start();
-                    else new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO())).start();
+                    else new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO())).start();
                     break exit;
                 } catch (InvalidUserException e) {
                     System.out.println(e.getMessage());

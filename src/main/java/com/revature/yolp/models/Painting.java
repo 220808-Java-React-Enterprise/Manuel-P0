@@ -21,6 +21,15 @@ public class Painting {
         this.isAvailable = isAvailable;
     }
 
+    public Painting(String id, String name, String author, String image, boolean isAvailable, double cost) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.image = image;
+        this.isAvailable = isAvailable;
+        this.cost = cost;
+    }
+
     public String getId() {
         return id;
     }
