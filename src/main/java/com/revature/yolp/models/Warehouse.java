@@ -3,22 +3,23 @@ package com.revature.yolp.models;
 public class Warehouse {
     private String id;
     private String name;
+
     private String street;
     private String city;
     private String state;
-    private String zipcode;
+    private String zip;
 
     public Warehouse() {
 
     }
 
-    public Warehouse(String id, String name, String street, String city, String state, String zipcode) {
+    public Warehouse(String id, String name, String street, String city, String state, String zip) {
         this.id = id;
         this.name = name;
         this.street = street;
         this.city = city;
         this.state = state;
-        this.zipcode = zipcode;
+        this.zip = zip;
     }
 
     public String getId() {
@@ -62,11 +63,11 @@ public class Warehouse {
     }
 
     public String getZipcode() {
-        return zipcode;
+        return zip;
     }
 
     public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
+        this.zip = zip;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class Warehouse {
                 ", street='" + street + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
-                ", zipcode='" + zipcode + '\'' +
+                ", zipcode='" + zip + '\'' +
                 '}';
     }
 }
