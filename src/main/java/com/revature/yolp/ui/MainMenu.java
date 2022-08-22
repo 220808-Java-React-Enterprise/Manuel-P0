@@ -4,6 +4,8 @@ import com.revature.yolp.models.Restaurant;
 import com.revature.yolp.models.Review;
 import com.revature.yolp.models.User;
 import com.revature.yolp.models.Painting;
+import com.revature.yolp.models.Order;
+
 
 import com.revature.yolp.services.RestaurantService;
 import com.revature.yolp.services.ReviewService;
@@ -111,6 +113,33 @@ public class MainMenu implements IMenu {
     }
     private void viewOrders(){
         System.out.println("Viewing Orders...");
+        Scanner scan = new Scanner(System.in);
+
+        List<Order> orders = orderService.getOrdersById(user.getId());
+        if (orders.size() == 0) {
+            System.out.println("You have no orders!");
+        } else {
+            for (Order o : orders) {
+                System.out.println("\nItems Purchased: " + o.getNumItems());
+                System.out.println("Total Cost: " + o.getTotalCost());
+                System.out.println("Date: " + o.getDate());
+            }
+        }
+
+        exit:
+        {
+            while (true) {
+
+                System.out.println("[x] return to main menu");
+                switch (scan.nextLine()) {
+                    case "x":
+                        break exit;
+                    default:
+                        System.out.println("\nInvalid input!");
+                        break;
+                }
+            }
+        }
     }
     private void checkout(){
         System.out.println("You're checking out (NEEDS IMPLEMENTATION)");
