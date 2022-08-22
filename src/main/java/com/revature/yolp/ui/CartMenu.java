@@ -1,15 +1,18 @@
 package com.revature.yolp.ui;
 
+import com.revature.yolp.daos.*;
+import com.revature.yolp.models.Order;
 import com.revature.yolp.models.Painting;
 import com.revature.yolp.models.User;
 import com.revature.yolp.models.Cart;
 
-import com.revature.yolp.services.UserService;
-import com.revature.yolp.services.CartService;
-import com.revature.yolp.services.PaintingService;
+import com.revature.yolp.services.*;
+import com.revature.yolp.utils.custom_exceptions.InvalidOrderException;
+import com.revature.yolp.utils.custom_exceptions.InvalidUserException;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 
 public class CartMenu implements IMenu{
@@ -19,15 +22,17 @@ public class CartMenu implements IMenu{
     private final UserService userService;
     private final CartService cartService;
     private final PaintingService paintingService;
+    private final OrderService orderService;
 
 
 
-    public CartMenu(User user, Cart cart, UserService userService, CartService cartService, PaintingService paintingService){
+    public CartMenu(User user, Cart cart, UserService userService, CartService cartService, PaintingService paintingService, OrderService orderService){
         this.user = user;
         this.cart = cart;
         this.userService = userService;
         this.cartService = cartService;
         this.paintingService = paintingService;
+        this.orderService = orderService;
 
     }
 
@@ -38,15 +43,7 @@ public class CartMenu implements IMenu{
 
         System.out.println("Welcome to the checkout menu!");
         List<Painting> paintings = cartService.getAllFromCart(user.getId());
-        if (paintings.size() == 0) {
-            System.out.println("Your cart is empty!");
-        } else {
-            for (Painting p : paintings) {
-                System.out.println("\nName: " + p.getName());
-                System.out.println("Author: " + p.getAuthor());
-                System.out.println("Cost: " + p.getCost());
-            }
-        }
+        displayPaintings(paintings);
 
 
 
@@ -56,9 +53,100 @@ public class CartMenu implements IMenu{
                 System.out.println("[2] To Remove Item from Cart");
                 System.out.println("[x] To Return to Main Menu");
 
+                switch (scan.nextLine()) {
+                    case "1":
+                        placeOrder(paintings);
+                        break exit;
+                    case "2":
+                        removeItem(paintings);
+                        break exit;
+                    case "x":
+                        new MainMenu(user, userService, new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO()),paintingService,cartService,orderService).start();
+                        break exit;
+                    default:
+                        System.out.println("\nInvalid input!");
+                        break;
+                }
+
+
             }
 
         }
 
     }
+
+
+
+    private void placeOrder(List<Painting> pa) {
+        double totalCost = 0;
+        orderExit:
+            while(true){
+                Painting dupe = null;
+                try{
+                for(Painting p : pa) {
+                    dupe = p;
+                    orderService.notAvailable(p.getId());
+                    totalCost += p.getCost();
+                }
+            }
+            catch(InvalidOrderException e){
+                System.out.println(e.getMessage());
+                cartService.removePaintingFromCart(cart,dupe);
+                break orderExit;
+            }
+                //ORDER IS CREATED! Note: NEEDS IMPLEMENTATION: date, warehouse
+                Order order = new Order(UUID.randomUUID().toString(),pa.size(),totalCost,"8/22/2022",user.getId(),"1");
+                orderService.placeOrder(order);
+                System.out.println("Item has been purchased!");
+                break orderExit;
+            }
+    }
+
+    private void removeItem(List<Painting> p) {
+        Scanner scan = new Scanner(System.in);
+        displayPaintings(p);
+
+        exitRemove: {
+            while (true) {
+            System.out.println("Select a painting to remove or return to the previous menu with [x]: ");
+                String input = scan.nextLine();
+                if(input == "x"){
+                    break exitRemove;
+                }
+                else if(isNumeric(input) && Integer.parseInt(input) >= 0 && Integer.parseInt(input) < p.size()) {
+                    Painting paintingToRemove = p.get(Integer.parseInt(input));
+
+                    cartService.removePaintingFromCart(cart,paintingToRemove);
+                    System.out.println("Painting removed from cart!");
+                    break exitRemove;
+                }
+                else{
+                    System.out.println("Invalid Input!");
+                    break exitRemove;
+                }
+            }
+        }
+    }
+    private void displayPaintings(List<Painting> pa){
+        if (pa.size() == 0) {
+            System.out.println("Your cart is empty!");
+        } else {
+            for (int i = 0; i < pa.size();i++) {
+                System.out.println("\nName: " + pa.get(i).getName());
+                System.out.println("ID: [" + i + "]");
+                System.out.println("Author: " + pa.get(i).getAuthor());
+                System.out.println("Cost: " + pa.get(i).getCost());
+            }
+        }
+    }
+
+        private static boolean isNumeric(String str) {
+            try {
+                Double.parseDouble(str);
+                return true;
+            } catch(NumberFormatException e){
+                return false;
+            }
+        }
+
 }

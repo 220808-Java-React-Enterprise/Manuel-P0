@@ -32,5 +32,8 @@ public class CartService {
     public void addPaintingToCart(String person_id, Painting paint){
         cartDAO.paintingToCart(person_id,paint);
     }
+    public void removePaintingFromCart(Cart cart,Painting paint){
+        cartDAO.removeFromCart(cart,paint);
+    }
 
 }

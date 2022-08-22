@@ -218,7 +218,7 @@ public class MainMenu implements IMenu {
     }
     private void checkout(){
         System.out.println("You're checking out (NEEDS IMPLEMENTATION)");
-        new CartMenu(user, cartService.getById(user.getId()),userService,cartService,paintingService).start();
+        new CartMenu(user, cartService.getById(user.getId()),userService,cartService,paintingService,orderService).start();
     }
     private void viewRestaurants() {
         Scanner scan = new Scanner(System.in);

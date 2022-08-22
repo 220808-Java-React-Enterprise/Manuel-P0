@@ -17,7 +17,21 @@ import java.util.List;
 
 public class OrderDAO implements CrudDAO<Order>{
     @Override
-    public void save(Order obj) throws IOException {
+    public void save(Order obj) {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO \"order\" (id, no_items,total_cost,date,person_id,warehouse_id) VALUES (?, ?, ?, ?, ?, ?)");
+            ps.setString(1, obj.getId());
+            ps.setInt(2, obj.getNumItems());
+            ps.setDouble(3, obj.getTotalCost());
+            ps.setString(4, obj.getDate());
+            ps.setString(5, obj.getPerson());
+            ps.setString(6, obj.getLocation());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
 
     }
 
@@ -45,7 +59,11 @@ public class OrderDAO implements CrudDAO<Order>{
         List<Order> orders = new ArrayList<Order>();
 
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("select * from painting p, painting_ordered po, \"order\" o where p.id = po.painting_id and po.order_id = o.id and o.person_id = '1';");
+            //PreparedStatement ps = con.prepareStatement("select * from painting p, painting_ordered po, \"order\" o where p.id = po.painting_id and po.order_id = o.id and o.person_id = '1';");
+            PreparedStatement ps = con.prepareStatement("select * from \"order\" o where o.person_id = ?");
+            ps.setString(1, id);
+
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -60,7 +78,26 @@ public class OrderDAO implements CrudDAO<Order>{
         }
 
 
-
         return orders;
+    }
+
+    public Order getOrderByPainting(String painting_id){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            //Gets here
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM \"order\" o, painting_ordered po WHERE po.order_id = o.id and po.painting_id = ?");
+            ps.setString(1, painting_id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                Order order = new Order(rs.getString("id"),rs.getInt("no_items"),rs.getDouble("total_cost"),rs.getString("date"),rs.getString("person_id"),rs.getString("warehouse_id"));
+                return order;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when trying to save to the database.");
+        }
+
+        return null;
     }
 }

@@ -43,7 +43,24 @@ public class CartDAO implements CrudDAO<Cart> {
             throw new InvalidSQLException("An error occurred when tyring to save to the database.");
         }
     }
+    public void removeFromCart(Cart cart, Painting paint){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("delete from painting_in_cart WHERE painting_id = ? and cart_id = ?");
+            ps.setString(1, paint.getId());
+            ps.setString(2, cart.getId());
 
+            ps.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+    }
+
+    public void removeAllFromCart(){
+
+    }
     @Override
     public Cart getById(String id) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
@@ -113,6 +130,7 @@ public class CartDAO implements CrudDAO<Cart> {
 
         return null;
     }
+
 
 
 
