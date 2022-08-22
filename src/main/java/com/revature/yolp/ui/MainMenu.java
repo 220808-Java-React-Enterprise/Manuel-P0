@@ -1,10 +1,13 @@
 package com.revature.yolp.ui;
 
+import com.revature.yolp.daos.*;
 import com.revature.yolp.models.Restaurant;
 import com.revature.yolp.models.Review;
 import com.revature.yolp.models.User;
 import com.revature.yolp.models.Painting;
 import com.revature.yolp.models.Order;
+import com.revature.yolp.models.Cart;
+
 
 
 import com.revature.yolp.services.RestaurantService;
@@ -13,6 +16,8 @@ import com.revature.yolp.services.UserService;
 import com.revature.yolp.services.OrderService;
 import com.revature.yolp.services.CartService;
 import com.revature.yolp.services.PaintingService;
+
+import com.revature.yolp.utils.custom_exceptions.InvalidUserException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -76,7 +81,77 @@ public class MainMenu implements IMenu {
     }
 
     private void viewPaintings(){
+
         System.out.println("Viewing Paintings...");
+
+        Scanner scan = new Scanner(System.in);
+
+        List<Painting> paintings = paintingService.getAllAvailable();
+        if (paintings.size() == 0) {
+            System.out.println("No current paintings available! Please contact support if you believe this is an error!");
+        } else {
+            for (int i = 0; i < paintings.size();i++) {
+                System.out.println("\nName: " + paintings.get(i).getName());
+                System.out.println("ID: [" + i + "]");
+                System.out.println("Author: " + paintings.get(i).getAuthor());
+                System.out.println("Cost: " + paintings.get(i).getCost());
+            }
+        }
+
+        exit:
+        {
+            while (true) {
+
+                System.out.println("\n[1] Add Item to Cart");
+                System.out.println("[x] return to main menu");
+
+                switch (scan.nextLine()) {
+                    case "x":
+                        break exit;
+                    case "1":
+                        exitAddCart:{
+                            while(true){
+                                System.out.println("\nInput ID of Painting, or x to return: ");
+                                String input = scan.nextLine();
+                                if(input == "x"){
+                                    break exit;
+                                }
+                                else if(isNumeric(input) && Integer.parseInt(input) >= 0 && Integer.parseInt(input) < paintings.size()){
+                                    Painting paintingToAdd = paintings.get(Integer.parseInt(input));
+                                    try{
+                                        cartService.paintingInCart(user,paintingToAdd);
+                                    }catch(InvalidUserException e){
+                                        System.out.println(e.getMessage());
+                                        break exit;
+                                    }
+
+                                    System.out.println("Painting added to cart!");
+                                    cartService.addPaintingToCart(user.getId(),paintingToAdd);
+                                    break exit;
+                                }
+                                else{
+                                    break exitAddCart;
+                                }
+                                /*switch(scan.nextLine()){
+                                    case "x":
+                                        break exit;
+
+                                    default:
+                                        System.out.println("\nInvalid input!");
+                                        break exitAddCart;
+
+                                }
+
+                                 */
+                            }
+                        }
+                    default:
+                        System.out.println("\nInvalid input!");
+                        break;
+                }
+            }
+        }
+
     }
     private void viewCart(){
         Scanner scan = new Scanner(System.in);
@@ -130,7 +205,7 @@ public class MainMenu implements IMenu {
         {
             while (true) {
 
-                System.out.println("[x] return to main menu");
+                System.out.println("\n[x] return to main menu");
                 switch (scan.nextLine()) {
                     case "x":
                         break exit;
@@ -143,6 +218,7 @@ public class MainMenu implements IMenu {
     }
     private void checkout(){
         System.out.println("You're checking out (NEEDS IMPLEMENTATION)");
+        new CartMenu(user, cartService.getById(user.getId()),userService,cartService,paintingService).start();
     }
     private void viewRestaurants() {
         Scanner scan = new Scanner(System.in);
@@ -186,6 +262,15 @@ public class MainMenu implements IMenu {
 
                 break exit;
             }
+        }
+    }
+
+    private static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
         }
     }
 }

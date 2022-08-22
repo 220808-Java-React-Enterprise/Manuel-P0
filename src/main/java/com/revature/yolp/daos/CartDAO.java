@@ -32,8 +32,33 @@ public class CartDAO implements CrudDAO<Cart> {
 
     }
 
+    public void paintingToCart(String person_id,Painting paint){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO painting_in_cart (painting_id, cart_id) VALUES (?, ?)");
+            ps.setString(1, paint.getId());
+            ps.setString(2, person_id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+    }
+
     @Override
     public Cart getById(String id) {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM cart WHERE person_id = ?");
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Cart(rs.getString("id"), rs.getInt("no_items"), rs.getString("person_id"));
+            }
+
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+
         return null;
     }
 
@@ -46,7 +71,8 @@ public class CartDAO implements CrudDAO<Cart> {
         List<Painting> paintings = new ArrayList<Painting>();
 
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM painting p, painting_in_cart pc, cart c WHERE p.id = pc.painting_id and pc.cart_id = c.id and p.id='1';");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM painting p, painting_in_cart pc, cart c WHERE p.id = pc.painting_id and pc.cart_id = c.id and c.person_id = ?;");
+            ps.setString(1,id);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -62,4 +88,32 @@ public class CartDAO implements CrudDAO<Cart> {
 
         return paintings;
     }
+
+    public Painting getPaintingInCart(String person_id, String painting_id){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            //Gets here
+
+            PreparedStatement ps = con.prepareStatement("select * from painting p, painting_in_cart pc, cart c where p.id = pc.painting_id and pc.cart_id = c.id and c.person_id = ? and p.id = ?;");
+            ps.setString(1, person_id);
+            ps.setString(2, painting_id);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+               Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getDouble("cost"));
+               return paint;
+            }
+                
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when trying to save to the database.");
+        }
+
+
+
+        return null;
+    }
+
+
+
 }

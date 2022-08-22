@@ -4,15 +4,15 @@ public class Cart {
 
     private String id;
     private int numItems;
-    private User person;
+    private String person_id;
 
     public Cart(){
 
     }
-    public Cart(String id, int numItems, User person){
+    public Cart(String id, int numItems, String person_id){
     this.id = id;
     this.numItems = numItems;
-    this.person = person;
+    this.person_id = person_id;
     }
 
     public String getId() {
@@ -31,12 +31,12 @@ public class Cart {
         this.numItems = numItems;
     }
 
-    public User getPerson() {
-        return person;
+    public String getPerson() {
+        return person_id;
     }
 
-    public void setPerson(User person) {
-        this.person = person;
+    public void setPerson(String person_id) {
+        this.person_id = person_id;
     }
 
 }
