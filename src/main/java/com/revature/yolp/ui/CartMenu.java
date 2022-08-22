@@ -10,6 +10,9 @@ import com.revature.yolp.services.*;
 import com.revature.yolp.utils.custom_exceptions.InvalidOrderException;
 import com.revature.yolp.utils.custom_exceptions.InvalidUserException;
 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -95,8 +98,12 @@ public class CartMenu implements IMenu{
                 break orderExit;
             }
                 //ORDER IS CREATED! Note: NEEDS IMPLEMENTATION: date, warehouse
-                Order order = new Order(UUID.randomUUID().toString(),pa.size(),totalCost,"8/22/2022",user.getId(),"1");
+                //Check tomorrow: is date working?
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                LocalDateTime now = LocalDateTime.now();
+                Order order = new Order(UUID.randomUUID().toString(),pa.size(),totalCost,dtf.format(now),user.getId(),"1");
                 orderService.placeOrder(order);
+                cartService.emptyCart(cart,pa);
                 System.out.println("Item has been purchased!");
                 break orderExit;
             }

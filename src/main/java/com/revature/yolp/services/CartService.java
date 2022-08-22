@@ -36,4 +36,10 @@ public class CartService {
         cartDAO.removeFromCart(cart,paint);
     }
 
+    public void emptyCart(Cart cart,List<Painting> paintings){
+        for(Painting p : paintings){
+            cartDAO.removeFromCart(cart,p);
+        }
+    }
+
 }
