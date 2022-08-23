@@ -1,43 +1,40 @@
-# P0 Requirements - Due (8/24/22)
+### Project 0 for Manuel Lopez
 
-## Overwiew
 
-The store app is a software that helps customers purchase products from your business. Designed with functionality that
-would make virtual shopping much simpler!
+## Index
+- Project Description
+- Technologies
+- ER diagram
 
-## Functionality
+## Project Description
 
-- add a new customer
-- search customers by name
-- display details of an order
-- place orders to store locations for customers
-- view order history of customer
-- view order history of location
-- view location inventory
-- The customer should be able to purchase multiple products
-- Order histories should have the option to be sorted by date (latest to oldest and vice versa) or cost (least expensive
-  to most expensive)
-- The manager should be able to replenish inventory
+The store app is a software that helps customers purchase products from your business.
+ Designed with functionality that would make virtual shopping much simpler!
+
+
+
 
 ## Models
+- person
+- cart
+- warehouse
+- painting
+- order
+- painting_ordered
+- painting_in_cart
 
-- Customer
-- Store
-- Orders
-- Product
+## Roles
+- Admin
+- User
 
-### Note
 
-Add as much models as you would need for your design
+## Technologies
 
-## Additional requirements
+- Java 8
+- PostGreSQL (running on Docker)
+- DBeaver
+- Apache Maven
+- JDBC
+- JUnit
+- Mockito
 
-- Exception Handling
-- Input validation
-- Logging (to a file, no logging to the console)
-- All core methods in each class needs to be tested.
-  - No need to test constructors, getters, and setters.
-- Data should be persisted, (no data should be hard coded)
-- You should use a DB to store data
-- DB structure should be 3NF
-- Should have an ER Diagram
