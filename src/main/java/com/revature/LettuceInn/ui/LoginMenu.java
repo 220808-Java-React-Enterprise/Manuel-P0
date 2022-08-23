@@ -1,7 +1,5 @@
 package com.revature.LettuceInn.ui;
 
-import com.revature.LettuceInn.daos.RestaurantDAO;
-import com.revature.LettuceInn.daos.ReviewDAO;
 import com.revature.LettuceInn.daos.UserDAO;
 import com.revature.LettuceInn.daos.PaintingDAO;
 import com.revature.LettuceInn.daos.CartDAO;
@@ -9,8 +7,6 @@ import com.revature.LettuceInn.daos.OrderDAO;
 import com.revature.LettuceInn.daos.*;
 
 import com.revature.LettuceInn.models.User;
-import com.revature.LettuceInn.services.RestaurantService;
-import com.revature.LettuceInn.services.ReviewService;
 import com.revature.LettuceInn.services.UserService;
 import com.revature.LettuceInn.services.PaintingService;
 import com.revature.LettuceInn.services.CartService;
@@ -52,7 +48,7 @@ public class LoginMenu implements IMenu {
                         System.out.println("checkpoint");
                         userService.register(user);
                         //new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO())).start();
-                        new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO())).start();
+                        new MainMenu(user, new UserService(new UserDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO())).start();
                         break;
                     case "x":
                         System.out.println("\nGoodbye!");
@@ -83,7 +79,7 @@ public class LoginMenu implements IMenu {
                 try {
                     User user = userService.login(username, password);
                     if (user.getAdmin().equals(true)) new AdminMenu(user, new UserService(new UserDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO()),new WarehouseService(new WarehouseDAO())).start();
-                    else new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO())).start();
+                    else new MainMenu(user, new UserService(new UserDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO())).start();
                     break exit;
                 } catch (InvalidUserException e) {
                     System.out.println(e.getMessage());

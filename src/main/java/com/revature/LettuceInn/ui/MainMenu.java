@@ -5,8 +5,6 @@ import com.revature.LettuceInn.models.Painting;
 import com.revature.LettuceInn.models.Order;
 
 
-import com.revature.LettuceInn.services.RestaurantService;
-import com.revature.LettuceInn.services.ReviewService;
 import com.revature.LettuceInn.services.UserService;
 import com.revature.LettuceInn.services.OrderService;
 import com.revature.LettuceInn.services.CartService;
@@ -20,18 +18,15 @@ import java.util.Scanner;
 public class MainMenu implements IMenu {
     private final User user;
     private final UserService userService;
-    private final RestaurantService restoService;
-    private final ReviewService reviewService;
+
 
     private final PaintingService paintingService;
     private final CartService cartService;
     private final OrderService orderService;
 
-    public MainMenu(User user, UserService userService, RestaurantService restoService, ReviewService reviewService, PaintingService paintingService, CartService cartService, OrderService orderService) {
+    public MainMenu(User user, UserService userService, PaintingService paintingService, CartService cartService, OrderService orderService) {
         this.user = user;
         this.userService = userService;
-        this.restoService = restoService;
-        this.reviewService =reviewService;
         this.paintingService = paintingService;
         this.cartService = cartService;
         this.orderService = orderService;
@@ -145,33 +140,36 @@ public class MainMenu implements IMenu {
     }
     private void viewCart(){
         Scanner scan = new Scanner(System.in);
-
-        System.out.println("Viewing Cart...");
-        List<Painting> paintings = cartService.getAllFromCart(user.getId());
-        if (paintings.size() == 0) {
-            System.out.println("Your cart is empty!");
-        } else {
-            for (Painting p : paintings) {
-                System.out.println("\nName: " + p.getName());
-                System.out.println("Author: " + p.getAuthor());
-                System.out.println("Cost: " + p.getCost());
-            }
-        }
-
-        exit:
+        exitAll:
         {
-            while (true) {
-                System.out.println("\n[1] to go to checkout");
-                System.out.println("[x] return to main menu");
-                switch (scan.nextLine()) {
-                    case "1":
-                        checkout();
-                        break exit;
-                    case "x":
-                        break exit;
-                    default:
-                        System.out.println("\nInvalid input!");
-                        break;
+            System.out.println("Viewing Cart...");
+            List<Painting> paintings = cartService.getAllFromCart(user.getId());
+            if (paintings.size() == 0) {
+                System.out.println("\nYour cart is empty!");
+                break exitAll;
+            } else {
+                for (Painting p : paintings) {
+                    System.out.println("\nName: " + p.getName());
+                    System.out.println("Author: " + p.getAuthor());
+                    System.out.println("Cost: " + p.getCost());
+                }
+            }
+
+            exit:
+            {
+                while (true) {
+                    System.out.println("\n[1] to go to checkout");
+                    System.out.println("[x] return to main menu");
+                    switch (scan.nextLine()) {
+                        case "1":
+                            checkout();
+                            break exit;
+                        case "x":
+                            break exit;
+                        default:
+                            System.out.println("\nInvalid input!");
+                            break;
+                    }
                 }
             }
         }

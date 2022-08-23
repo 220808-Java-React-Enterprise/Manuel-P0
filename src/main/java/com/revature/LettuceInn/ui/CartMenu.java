@@ -63,7 +63,7 @@ public class CartMenu implements IMenu{
                         removeItem(paintings);
                         break exit;
                     case "x":
-                        new MainMenu(user, userService, new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO()),paintingService,cartService,orderService).start();
+                        new MainMenu(user, userService,paintingService,cartService,orderService).start();
                         break exit;
                     default:
                         System.out.println("\nInvalid input!");
