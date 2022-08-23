@@ -103,6 +103,7 @@ public class CartMenu implements IMenu{
                 Order order = new Order(UUID.randomUUID().toString(),pa.size(),totalCost,dtf.format(now),user.getId(),p.getLocation());
 
                 orderService.placeOrder(order);
+                orderService.paintingOrdered(pa,order);
                 cartService.emptyCart(cart,pa);
                 paintingService.makeUnavailable(pa);
                 System.out.println("Item has been purchased!");

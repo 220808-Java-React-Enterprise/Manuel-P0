@@ -180,13 +180,38 @@ public class MainMenu implements IMenu {
 
         List<Order> orders = orderService.getOrdersById(user.getId());
         if (orders.size() == 0) {
-            System.out.println("You have no orders!");
+            System.out.println("\nYou have no orders!");
         } else {
-            for (Order o : orders) {
-                System.out.println("\nItems Purchased: " + o.getNumItems());
-                System.out.println("Total Cost: " + o.getTotalCost());
-                System.out.println("Date: " + o.getDate());
+            for (int i = 0; i < orders.size(); i++) {
+                System.out.println("\nItems Purchased: " + orders.get(i).getNumItems());
+                System.out.println("Total Cost: " + orders.get(i).getTotalCost());
+                System.out.println("Date: " + orders.get(i).getDate());
+                System.out.println("ID: [" + i + "]");
             }
+            System.out.println("Input ID to view details of order, or [x] to return to main menu");
+            exitOrder: {
+                while(true){
+                    String input = scan.nextLine();
+                    if(input == "x"){
+                        break exitOrder;
+                    }
+                    else if(isNumeric(input) && Integer.parseInt(input) >= 0 && Integer.parseInt(input) < orders.size()){
+                        List<Painting> paintings = orderService.getAllFromOrder(orders.get(Integer.parseInt(input)).getId());
+                        for(Painting p : paintings){
+                            System.out.println("\nName: " + p.getName());
+                            System.out.println("Author: " + p.getAuthor());
+                            System.out.println("Cost: " + p.getCost());
+                        }
+                        System.out.println("\nPress anything to continue: ");
+                        input = scan.nextLine();
+                        break exitOrder;
+                    }
+                    else{
+                        System.out.println("Invalid Input!");
+                    }
+                }
+            }
+
         }
 
         exit:

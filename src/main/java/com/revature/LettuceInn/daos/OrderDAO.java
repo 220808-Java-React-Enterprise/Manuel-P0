@@ -1,6 +1,7 @@
 package com.revature.LettuceInn.daos;
 
 import com.revature.LettuceInn.models.Order;
+import com.revature.LettuceInn.models.Painting;
 import com.revature.LettuceInn.utils.custom_exceptions.InvalidSQLException;
 import com.revature.LettuceInn.utils.database.ConnectionFactory;
 
@@ -24,6 +25,9 @@ public class OrderDAO implements CrudDAO<Order>{
             ps.setString(5, obj.getPerson());
             ps.setString(6, obj.getLocation());
             ps.executeUpdate();
+
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,11 +102,11 @@ public class OrderDAO implements CrudDAO<Order>{
         return null;
     }
 
-   /* public static List<Painting> getAllInOrder(String id){
+   public static List<Painting> getAllInOrder(String id){
         List<Painting> paintings = new ArrayList<Painting>();
 
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM painting p, painting_ordered po, order o WHERE p.id = po.painting_id and po.order_id = o.id and o.id = ?;");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM painting p, painting_ordered po WHERE p.id = po.painting_id and po.order_id = ?;");
             ps.setString(1,id);
             ResultSet rs = ps.executeQuery();
 
@@ -119,5 +123,18 @@ public class OrderDAO implements CrudDAO<Order>{
 
         return paintings;
     }
-*/
+
+    public static void paintingOrdered(String paint_id, String order_id){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO painting_ordered (painting_id, order_id) VALUES (?, ?)");
+            ps.setString(1, paint_id);
+            ps.setString(2, order_id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+    }
+
 }
