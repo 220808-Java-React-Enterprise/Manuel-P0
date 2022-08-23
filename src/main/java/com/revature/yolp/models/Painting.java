@@ -8,27 +8,35 @@ public class Painting {
     private String image;
     private boolean isAvailable;
     private double cost;
+    private String location;
+
 
     public Painting() {
 
     }
 
-    public Painting(String id, String name, String author, String image, boolean isAvailable) {
+    public Painting(String id, String name, String author, String image, boolean isAvailable, String location) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.image = image;
         this.isAvailable = isAvailable;
+        this.location = location;
     }
 
-    public Painting(String id, String name, String author, String image, boolean isAvailable, double cost) {
+
+
+    public Painting(String id, String name, String author, String image, boolean isAvailable, String location, double cost) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.image = image;
         this.isAvailable = isAvailable;
+        this.location = location;
         this.cost = cost;
     }
+
+
 
     public String getId() {
         return id;
@@ -76,6 +84,13 @@ public class Painting {
 
     public void setCost(double cost){
         this.cost = cost;
+    }
+
+    public String getLocation(){
+        return location;
+    }
+    public void setLocation(String location){
+        this.location = location;
     }
 
 }

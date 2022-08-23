@@ -41,5 +41,11 @@ public class CartService {
             cartDAO.removeFromCart(cart,p);
         }
     }
+    public Painting getPaintingFromCart(String id){
+        List<Painting> paintings = cartDAO.getAllInCart(id);
+        //In future- this would be replaced by finding the painting warehouse closest to the user.
+        return paintings.get(0);
+    }
+
 
 }

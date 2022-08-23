@@ -98,12 +98,14 @@ public class CartMenu implements IMenu{
                 break orderExit;
             }
                 //ORDER IS CREATED! Note: NEEDS IMPLEMENTATION: date, warehouse
-                //Check tomorrow: is date working?
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
                 LocalDateTime now = LocalDateTime.now();
-                Order order = new Order(UUID.randomUUID().toString(),pa.size(),totalCost,dtf.format(now),user.getId(),"1");
+                Painting p = cartService.getPaintingFromCart(user.getId());
+                Order order = new Order(UUID.randomUUID().toString(),pa.size(),totalCost,dtf.format(now),user.getId(),p.getLocation());
+
                 orderService.placeOrder(order);
                 cartService.emptyCart(cart,pa);
+                paintingService.makeUnavailable(pa);
                 System.out.println("Item has been purchased!");
                 break orderExit;
             }

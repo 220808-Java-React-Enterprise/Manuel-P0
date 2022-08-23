@@ -39,6 +39,17 @@ public class PaintingDAO implements CrudDAO<Painting>{
         return null;
     }
 
+    public void makeUnavailable(Painting p){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE painting SET is_available='false' WHERE id= ?");
+            ps.setString(1, p.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+    }
+
     public List<Painting> getAllAvailable()
     {
         List<Painting> available = new ArrayList<Painting>();
@@ -49,7 +60,7 @@ public class PaintingDAO implements CrudDAO<Painting>{
 
             while (rs.next()) {
                 //We are calling the painting with the cost constructor here because if we are checking cart it means that the painting HAS to be available and therefore have a cost
-                Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getDouble("cost"));
+                Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getString("warehouse_id"),rs.getDouble("cost"));
                 available.add(paint);
             }
         } catch (SQLException e) {

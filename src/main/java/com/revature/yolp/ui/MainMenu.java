@@ -50,24 +50,20 @@ public class MainMenu implements IMenu {
         exit: {
             while (true) {
                 System.out.println("\nWelcome to the main menu " + user.getUsername() + "!");
-                System.out.println("[1] View all restaurants");
-                System.out.println("[2] View all available paintings");
-                System.out.println("[3] View your cart");
-                System.out.println("[4] View your past orders");
+                System.out.println("[1] View all available paintings");
+                System.out.println("[2] View your cart");
+                System.out.println("[3] View your past orders");
                 System.out.println("[x] Sign out!");
                 System.out.print("\nEnter: ");
 
                 switch (scan.nextLine()) {
                     case "1":
-                        viewRestaurants();
-                        break;
-                    case "2":
                         viewPaintings();
                         break;
-                    case "3":
+                    case "2":
                         viewCart();
                         break;
-                    case "4":
+                    case "3":
                         viewOrders();
                         break;
                     case "x":
@@ -217,53 +213,10 @@ public class MainMenu implements IMenu {
         }
     }
     private void checkout(){
-        System.out.println("You're checking out (NEEDS IMPLEMENTATION)");
+        System.out.println("Checking out..)");
         new CartMenu(user, cartService.getById(user.getId()),userService,cartService,paintingService,orderService).start();
     }
-    private void viewRestaurants() {
-        Scanner scan = new Scanner(System.in);
 
-        exit: {
-            while (true) {
-                System.out.println("\nViewing all restaurants...");
-                List<Restaurant> restaurants = restoService.getAllRestaurants();
-
-                for (int i = 0; i < restaurants.size(); i++) {
-                    System.out.println("[" + (i + 1) + "] " + restaurants.get(i).getName());
-                }
-
-                System.out.print("\nSelect a restaurant: ");
-                int index = scan.nextInt() - 1;
-
-                try {
-                    Restaurant selectedResto = restaurants.get(index);
-
-                    List<Review> reviews = reviewService.getAllReviewsByRestaurantId(selectedResto.getId());
-
-                    System.out.println("\nName: " + selectedResto.getName());
-                    for (Review r : reviews) {
-                        System.out.println("Comment: " + r.getComment());
-                        System.out.println("Rating: " + r.getRating());
-                        System.out.println("User: " + userService.getUserById(r.getUser_id()).getUsername());
-                    }
-
-                    System.out.print("\nComment: ");
-                    scan.nextLine();
-                    String comment = scan.nextLine();
-
-                    System.out.print("\nRating [1 - 5]: ");
-                    int rating = scan.nextInt();
-
-                    Review review = new Review(UUID.randomUUID().toString(), comment, rating, user.getId(), selectedResto.getId());
-                    reviewService.saveReview(review);
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("\nInvalid input!");
-                }
-
-                break exit;
-            }
-        }
-    }
 
     private static boolean isNumeric(String str) {
         try {

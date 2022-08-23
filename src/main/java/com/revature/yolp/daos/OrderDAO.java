@@ -100,4 +100,27 @@ public class OrderDAO implements CrudDAO<Order>{
 
         return null;
     }
+
+   /* public static List<Painting> getAllInOrder(String id){
+        List<Painting> paintings = new ArrayList<Painting>();
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM painting p, painting_ordered po, order o WHERE p.id = po.painting_id and po.order_id = o.id and o.id = ?;");
+            ps.setString(1,id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                //We are calling the painting with the cost constructor here because if we are checking cart it means that the painting HAS to be available and therefore have a cost
+                Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getString("warehouse_id"),rs.getDouble("cost"));
+                paintings.add(paint);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+
+
+        return paintings;
+    }
+*/
 }

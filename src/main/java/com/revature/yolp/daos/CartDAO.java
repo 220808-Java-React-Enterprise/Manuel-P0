@@ -32,6 +32,8 @@ public class CartDAO implements CrudDAO<Cart> {
 
     }
 
+
+
     public void paintingToCart(String person_id,Painting paint){
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO painting_in_cart (painting_id, cart_id) VALUES (?, ?)");
@@ -94,7 +96,7 @@ public class CartDAO implements CrudDAO<Cart> {
 
             while (rs.next()) {
                 //We are calling the painting with the cost constructor here because if we are checking cart it means that the painting HAS to be available and therefore have a cost
-                Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getDouble("cost"));
+                Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getString("warehouse_id"),rs.getDouble("cost"));
                 paintings.add(paint);
             }
         } catch (SQLException e) {
@@ -116,7 +118,7 @@ public class CartDAO implements CrudDAO<Cart> {
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-               Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getDouble("cost"));
+               Painting paint = new Painting(rs.getString("id"),rs.getString("name"),rs.getString("author"),rs.getString("image"),rs.getBoolean("is_available"),rs.getString("warehouse_id"),rs.getDouble("cost"));
                return paint;
             }
                 

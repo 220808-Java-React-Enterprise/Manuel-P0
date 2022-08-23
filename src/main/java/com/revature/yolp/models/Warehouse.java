@@ -7,13 +7,13 @@ public class Warehouse {
     private String street;
     private String city;
     private String state;
-    private String zip;
+    private int zip;
 
     public Warehouse() {
 
     }
 
-    public Warehouse(String id, String name, String street, String city, String state, String zip) {
+    public Warehouse(String id, String name, String street, String city, String state, int zip) {
         this.id = id;
         this.name = name;
         this.street = street;
@@ -62,12 +62,12 @@ public class Warehouse {
         this.state = state;
     }
 
-    public String getZipcode() {
+    public int getZipcode() {
         return zip;
     }
 
-    public void setZipcode(String zipcode) {
-        this.zip = zip;
+    public void setZipcode(int zipcode) {
+        this.zip = zipcode;
     }
 
     @Override

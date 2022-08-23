@@ -20,4 +20,14 @@ public class PaintingService {
         paintingDAO.addToCart(p);
     }
 
+    public void makeUnavailable(List<Painting> paintings){
+        for(Painting p: paintings){
+            paintingDAO.makeUnavailable(p);
+        }
+    }
+
+    public void newPainting(Painting p){
+
+    }
+
 }
