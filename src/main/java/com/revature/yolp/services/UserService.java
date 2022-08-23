@@ -35,7 +35,7 @@ public class UserService {
         return true;
     }
     public boolean isValidEmail(String email){
-        if(email.contains("@") == false){
+        if(!email.matches("^[A-Za-z0-9][A-Za-z0-9!#$%&'*+\\-/=?^_`{}|]{0,63}@[A-Za-z0-9.-]{1,253}.[A-Za-z]{2,24}$")){
             throw new InvalidUserException("\nInvalid password! Minimum eight characters, at least one letter and one number");
         }
         return true;

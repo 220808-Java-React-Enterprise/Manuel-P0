@@ -3,6 +3,8 @@ package com.revature.yolp.ui;
 import com.revature.yolp.models.*;
 import com.revature.yolp.services.*;
 import java.util.*;
+
+import com.revature.yolp.utils.custom_exceptions.InvalidPaintingException;
 import com.revature.yolp.utils.custom_exceptions.InvalidUserException;
 
 
@@ -67,19 +69,52 @@ public class AdminMenu implements IMenu {
         Scanner scan = new Scanner(System.in);
         List<Warehouse> warehouses = warehouseService.getWarehouses();
 
-        System.out.print("\nEnter Product Name: ");
-        name = scan.nextLine();
 
-        System.out.print("\nEnter Product Creator: ");
-        author = scan.nextLine();
+
+        nameExit:
+        {
+            while (true) {
+                System.out.print("\nEnter Product Name: ");
+                name = scan.nextLine();
+
+                try {
+                    paintingService.isValidName(name);
+                    break nameExit;
+                } catch (InvalidPaintingException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        authorExit:
+        {
+            while (true) {
+                System.out.print("\nEnter Product Creator: ");
+                author = scan.nextLine();
+
+                try {
+                    paintingService.isValidCreator(author);
+                    break authorExit;
+                } catch (InvalidPaintingException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+
 
         exitCost:{
             while(true) {
                 System.out.println("\nEnter Cost: ");
                 String tempCost = scan.nextLine();
-                if(isNumeric(tempCost)){
-                    cost = Double.parseDouble(tempCost);
-                    break exitCost;
+                try {
+                    if (isNumeric(tempCost)) {
+                        cost = Double.parseDouble(tempCost);
+                        paintingService.isValidCost(cost);
+                        break exitCost;
+                    }
+                }catch(InvalidPaintingException e){
+                    System.out.println(e.getMessage());
                 }
             }
         }

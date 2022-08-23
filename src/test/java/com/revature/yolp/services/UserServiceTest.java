@@ -109,4 +109,25 @@ public class UserServiceTest {
         // Act
         sut.login(invalidUsername, invalidPassword);
     }
+
+
+
+    @Test
+    public void test_IsValidEmail_GivenValidEmail(){
+        String validEmail = "Test1999@gmail.com";
+        boolean flag = sut.isValidEmail(validEmail);
+        Assert.assertTrue(flag);
+    }
+    @Test(expected = InvalidUserException.class)
+    public void test_IsValidEmail_GivenOnlyAts(){
+        String invalidEmail = "@@@@@";
+        sut.isValidEmail(invalidEmail);
+    }
+
+    @Test(expected = InvalidUserException.class)
+    public void test_IsValidEmail_givenNothing(){
+        String invalidEmail = "";
+        sut.isValidEmail(invalidEmail);
+    }
+
 }

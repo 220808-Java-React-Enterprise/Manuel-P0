@@ -15,8 +15,24 @@ import java.util.*;
 
 public class PaintingDAO implements CrudDAO<Painting>{
     @Override
-    public void save(Painting obj) throws IOException {
+    public void save(Painting obj){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO painting (id, name, author, image, is_available, cost, warehouse_id, person_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, obj.getId());
+            ps.setString(2, obj.getName());
+            ps.setString(3, obj.getAuthor());
+            ps.setString(4, obj.getImage());
+            ps.setBoolean(5, obj.isAvailable());
+            ps.setDouble(6, obj.getCost());
+            ps.setString(7, null);
+            ps.setString(8, obj.getLocation());
 
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
     }
 
     @Override
