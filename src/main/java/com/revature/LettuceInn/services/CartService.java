@@ -17,6 +17,10 @@ public class CartService {
         this.cartDAO = cartDAO;
     }
 
+    public void newCart(Cart cart){
+    cartDAO.save(cart);
+    }
+
     public List<Painting> getAllFromCart(String id){
         return CartDAO.getAllInCart(id);
     }
@@ -29,8 +33,9 @@ public class CartService {
         return cartDAO.getById(id);
     }
 
-    public void addPaintingToCart(String person_id, Painting paint){
-        cartDAO.paintingToCart(person_id,paint);
+    public void addPaintingToCart(String cart_id, Painting paint){
+
+        cartDAO.paintingToCart(cart_id,paint);
     }
     public void removePaintingFromCart(Cart cart,Painting paint){
         cartDAO.removeFromCart(cart,paint);

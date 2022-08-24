@@ -55,9 +55,6 @@ public class AdminMenu implements IMenu {
     }
 
     private void addPainting() {
-        String username = "";
-        String password = "";
-        String password2 = "";
         String name = "";
         String author = "";
         String location = "";
@@ -130,10 +127,14 @@ public class AdminMenu implements IMenu {
                     break exitWarehouse;
                 }
                 else if(isNumeric(input) && Integer.parseInt(input) >= 0 && Integer.parseInt(input) < warehouses.size()){
+                    System.out.println(Integer.parseInt(input));
                     Warehouse warehouseSelected = warehouses.get(Integer.parseInt(input));
+                    System.out.println(warehouseSelected.getName());
                     selected = warehouseSelected;
 
                     System.out.println("Warehouse Selected");
+                    System.out.println(warehouseSelected.getId());
+                    System.out.println(selected.getId());
                     location = warehouseSelected.getId();
                     break exitWarehouse;
                 }
@@ -154,9 +155,10 @@ public class AdminMenu implements IMenu {
 
                 switch (scan.nextLine().toLowerCase()) {
                     case "y":
-                        Painting paint = new Painting(UUID.randomUUID().toString(),name,author,"placeholder",true,location,cost);
+                        Painting paint = new Painting(UUID.randomUUID().toString(),name,author,"placeholder",true,selected.getId(),cost);
                         paintingService.newPainting(paint);
                         //Go into paintingDAO to actually add it
+                        System.out.println(selected.getId());
                         System.out.println("\npainting done!");
                         break confirmExit;
                     case "n":

@@ -1,5 +1,6 @@
 package com.revature.LettuceInn.ui;
 
+import com.revature.LettuceInn.models.Cart;
 import com.revature.LettuceInn.models.User;
 import com.revature.LettuceInn.models.Painting;
 import com.revature.LettuceInn.models.Order;
@@ -111,7 +112,8 @@ public class MainMenu implements IMenu {
                                     }
 
                                     System.out.println("Painting added to cart!");
-                                    cartService.addPaintingToCart(user.getId(),paintingToAdd);
+                                    Cart cart = cartService.getById(user.getId());
+                                    cartService.addPaintingToCart(cart.getId(),paintingToAdd);
                                     break exit;
                                 }
                                 else{

@@ -6,6 +6,7 @@ import com.revature.LettuceInn.daos.CartDAO;
 import com.revature.LettuceInn.daos.OrderDAO;
 import com.revature.LettuceInn.daos.*;
 
+import com.revature.LettuceInn.models.Cart;
 import com.revature.LettuceInn.models.User;
 import com.revature.LettuceInn.services.UserService;
 import com.revature.LettuceInn.services.PaintingService;
@@ -18,9 +19,12 @@ import java.util.UUID;
 
 public class LoginMenu implements IMenu {
     private final UserService userService;
+    private final CartService cartService;
 
-    public LoginMenu(UserService userService) {
+    public LoginMenu(UserService userService, CartService cartService) {
+
         this.userService = userService;
+        this.cartService = cartService;
     }
 
     @Override
@@ -45,8 +49,12 @@ public class LoginMenu implements IMenu {
                         break;
                     case "2":
                         User user = signup();
+                        Cart cart = new Cart(UUID.randomUUID().toString(),0,user.getId());
                         System.out.println("checkpoint");
                         userService.register(user);
+                        cartService.newCart(cart);
+                        //Make New cart
+
                         //new MainMenu(user, new UserService(new UserDAO()), new RestaurantService(new RestaurantDAO()), new ReviewService(new ReviewDAO())).start();
                         new MainMenu(user, new UserService(new UserDAO()),new PaintingService(new PaintingDAO()),new CartService(new CartDAO()),new OrderService(new OrderDAO())).start();
                         break;

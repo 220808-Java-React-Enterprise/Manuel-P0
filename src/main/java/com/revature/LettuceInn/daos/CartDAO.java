@@ -16,8 +16,18 @@ import java.util.*;
 
 public class CartDAO implements CrudDAO<Cart> {
     @Override
-    public void save(Cart obj) throws IOException {
+    public void save(Cart obj){
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO cart (id, no_items, person_id ) VALUES (?, ?, ?)");
+            ps.setString(1, obj.getId());
+            ps.setInt(2, obj.getNumItems());
+            ps.setString(3, obj.getPerson());
 
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
     }
 
     @Override
@@ -32,11 +42,11 @@ public class CartDAO implements CrudDAO<Cart> {
 
 
 
-    public void paintingToCart(String person_id,Painting paint){
+    public void paintingToCart(String cart_id,Painting paint){
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO painting_in_cart (painting_id, cart_id) VALUES (?, ?)");
             ps.setString(1, paint.getId());
-            ps.setString(2, person_id);
+            ps.setString(2, cart_id);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

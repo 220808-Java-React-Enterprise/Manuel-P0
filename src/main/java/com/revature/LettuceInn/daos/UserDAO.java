@@ -65,7 +65,6 @@ public class UserDAO implements CrudDAO<User> {
     public String getUsername(String username) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT username FROM person WHERE username = ?");
-            System.out.println("wack");
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
@@ -83,7 +82,6 @@ public class UserDAO implements CrudDAO<User> {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
             //Gets here
             PreparedStatement ps = con.prepareStatement("SELECT email FROM person WHERE email = ?");
-            System.out.println("wack");
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 

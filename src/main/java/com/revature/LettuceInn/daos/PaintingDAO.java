@@ -21,7 +21,7 @@ public class PaintingDAO implements CrudDAO<Painting>{
             ps.setString(4, obj.getImage());
             ps.setBoolean(5, obj.isAvailable());
             ps.setDouble(6, obj.getCost());
-            ps.setString(7, null);
+            ps.setString(7, obj.getLocation());
             ps.setString(8, obj.getLocation());
 
             ps.executeUpdate();
