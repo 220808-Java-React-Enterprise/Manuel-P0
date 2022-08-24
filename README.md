@@ -38,3 +38,5 @@ The store app is a software that helps customers purchase products from your bus
 - JUnit
 - Mockito
 
+![](https://github.com/220808-Java-React-Enterprise/Manuel-P0/blob/main/target/classes/LettuceInn%20ERD.png)
+	
